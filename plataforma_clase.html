@@ -807,8 +807,8 @@
 <!-- ============ MAIN ============ -->
 <div class="container">
 
-  <!-- ====== CONFIG PANEL (Instructor) ====== -->
-  <div class="config-panel" id="configPanel">
+  <!-- ====== CONFIG PANEL (Instructor) — Oculto por defecto ====== -->
+  <div class="config-panel" id="configPanel" style="display:none;">
     <h3>⚙️ Panel del Docente — Configuración de sesión</h3>
     <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem;">
       Configura la hora de desbloqueo de la evaluación final y el tiempo límite. Los estudiantes solo verán el contenido.
@@ -1963,6 +1963,32 @@ function exportResults() {
 // INIT
 // ==========================================
 state.examTimeLeft = state.examDuration * 60;
+
+// --- SECRET TEACHER ACCESS ---
+// Method 1: URL parameter → tuurl.html?docente=true
+// Method 2: Keyboard shortcut → Ctrl + Shift + D
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('docente') === 'true') {
+    const pass = prompt('Contraseña de docente:');
+    if (pass === state.teacherPass) {
+      document.getElementById('configPanel').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      e.preventDefault();
+      const pass = prompt('Contraseña de docente:');
+      if (pass === state.teacherPass) {
+        document.getElementById('configPanel').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (pass !== null) {
+        alert('Contraseña incorrecta');
+      }
+    }
+  });
+})();
 </script>
 
 </body>
